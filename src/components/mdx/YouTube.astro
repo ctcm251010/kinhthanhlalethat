@@ -1,0 +1,24 @@
+---
+interface Props {
+  id: string;
+  title?: string;
+}
+const { id, title = 'Video YouTube' } = Astro.props;
+const safeId = /^[\w-]{6,20}$/.test(id) ? id : '';
+---
+
+{
+  safeId ? (
+    <figure class="video-embed">
+      <iframe
+        src={`https://www.youtube-nocookie.com/embed/${safeId}`}
+        title={title}
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      />
+    </figure>
+  ) : (
+    <p class="callout callout-warning">Video chưa có ID hợp lệ.</p>
+  )
+}

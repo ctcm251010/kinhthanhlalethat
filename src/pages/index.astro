@@ -1,0 +1,126 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
+import TopicCard from '@/components/TopicCard.astro';
+import LessonCard from '@/components/LessonCard.astro';
+import heroReading from '@/assets/hero-reading.png';
+import {
+  getPublishedLessons,
+  getPublishedTopics,
+  getTopicForLesson,
+} from '@/utils/content';
+
+const [topics, lessons] = await Promise.all([getPublishedTopics(), getPublishedLessons()]);
+const featuredTopics = topics.filter((topic) => topic.data.featured).slice(0, 6);
+const latestLessons = lessons.slice(0, 6);
+const lessonTopics = new Map(
+  await Promise.all(
+    lessons.map(async (lesson) => [lesson.id, await getTopicForLesson(lesson)] as const),
+  ),
+);
+const lessonCounts = new Map(
+  topics.map((topic) => [
+    topic.id,
+    lessons.filter((lesson) => lesson.data.topic.id === topic.id).length,
+  ]),
+);
+---
+
+<BaseLayout>
+  <section class="hero">
+    <div class="page-shell hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Học từng bước · Đọc có ngữ cảnh</p>
+        <h1>Hiểu Kinh Thánh rõ ràng hơn, mỗi ngày.</h1>
+        <p>
+          Một không gian tiếng Việt giúp bạn bắt đầu từ nền tảng, học theo chủ đề và duy trì nhịp đọc dễ tiếp cận.
+        </p>
+        <div class="button-row">
+          <a class="button button-primary" href="/le-that/">Khám phá Lẽ Thật</a>
+          <a class="button button-secondary" href="/kinh-thanh/">Đọc Kinh Thánh</a>
+        </div>
+      </div>
+      <figure class="hero-art">
+        <Image
+          src={heroReading}
+          alt="Một quyển Kinh Thánh đang mở trên bàn đọc trong ánh sáng buổi sáng"
+          widths={[640, 960, 1280]}
+          sizes="(max-width: 960px) 100vw, 55vw"
+          format="webp"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </figure>
+    </div>
+  </section>
+
+  <section class="page-section page-section-muted">
+    <div class="page-shell">
+      <SectionHeading
+        eyebrow="Một nền tảng vững"
+        title="Vì sao nên học Kinh Thánh?"
+        description="Việc đọc có phương pháp giúp bạn nhận ra mạch văn, đặt câu hỏi tốt hơn và xây dựng hiểu biết từng bước."
+      />
+      <div class="principle-grid">
+        <article class="principle-card">
+          <div class="principle-number">01</div>
+          <h3>Hiểu đúng ngữ cảnh</h3>
+          <p>Quan sát phần trước, phần sau và thể loại giúp hạn chế việc tách một câu khỏi ý chính.</p>
+        </article>
+        <article class="principle-card">
+          <div class="principle-number">02</div>
+          <h3>Đi từ điều căn bản</h3>
+          <p>Các chủ đề được sắp xếp thành lộ trình ngắn, để người mới không bị choáng ngợp.</p>
+        </article>
+        <article class="principle-card">
+          <div class="principle-number">03</div>
+          <h3>Học với sự kiểm chứng</h3>
+          <p>Nguồn, bản dịch và tham chiếu cần được ghi rõ trước khi nội dung được xuất bản.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="page-shell">
+      <SectionHeading
+        eyebrow="Học theo chủ đề"
+        title="Lẽ thật nổi bật"
+        description="Bắt đầu từ một chủ đề phù hợp. Mỗi chủ đề gồm những bài học ngắn có liên hệ với nhau."
+      />
+      <div class="topic-grid">
+        {featuredTopics.map((topic) => <TopicCard topic={topic} lessonCount={lessonCounts.get(topic.id) ?? 0} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section page-section-muted">
+    <div class="page-shell">
+      <SectionHeading
+        eyebrow="Nội dung mới"
+        title="Bài học mới nhất"
+        description="Các bài học được lấy trực tiếp từ Content Collections và sắp xếp theo ngày xuất bản."
+      />
+      <div class="lesson-grid">
+        {
+          latestLessons.map((lesson) => {
+            const topic = lessonTopics.get(lesson.id);
+            return topic && <LessonCard lesson={lesson} topic={topic} />;
+          })
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="page-shell cta-panel">
+      <div>
+        <p class="eyebrow">Bắt đầu hôm nay</p>
+        <h2>Tìm hiểu Kinh Thánh từng bước</h2>
+        <p>Chọn một chủ đề, đọc bài đầu tiên và lưu lại những câu hỏi bạn muốn tiếp tục tìm hiểu.</p>
+      </div>
+      <a class="button" href="/le-that/">Xem các chủ đề</a>
+    </div>
+  </section>
+</BaseLayout>

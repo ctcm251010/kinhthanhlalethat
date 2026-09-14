@@ -1,0 +1,11 @@
+---
+interface Props {
+  reference: string;
+}
+const { reference } = Astro.props;
+---
+
+<figure class="bible-quote">
+  <blockquote><slot /></blockquote>
+  <figcaption>{reference}</figcaption>
+</figure>

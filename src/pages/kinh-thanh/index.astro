@@ -1,0 +1,44 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import BibleReader from '@/components/BibleReader.astro';
+import { bibleBooks } from '@/data/bible';
+
+const firstBook = bibleBooks[0];
+if (!firstBook) throw new Error('Bible data cần có ít nhất một sách.');
+const firstChapter = firstBook.chapters[0];
+if (!firstChapter) throw new Error(`Sách ${firstBook.book} cần có ít nhất một chương.`);
+---
+
+<BaseLayout
+  title="Đọc Kinh Thánh"
+  description="Bible Reader tiếng Việt với điều hướng theo sách, chương và câu; hiện đang dùng dữ liệu mẫu để kiểm tra kiến trúc."
+>
+  <section class="page-hero">
+    <div class="page-shell">
+      <Breadcrumbs items={[{ label: 'Trang chủ', href: '/' }, { label: 'Kinh Thánh' }]} />
+      <div class="page-hero-inner">
+        <p class="eyebrow">Bible Reader</p>
+        <h1>Đọc theo sách và chương.</h1>
+        <p>Giao diện đọc đã sẵn sàng cho dữ liệu Book → Chapter → Verse. Base version chỉ chứa dữ liệu giữ chỗ, không phải toàn văn Kinh Thánh.</p>
+      </div>
+    </div>
+  </section>
+  <div class="page-shell reader-shell">
+    <BibleReader books={bibleBooks} book={firstBook} chapter={firstChapter} headingLevel="h2" />
+    <section class="page-section" aria-labelledby="book-list-title">
+      <h2 id="book-list-title">Sách đang có trong dữ liệu mẫu</h2>
+      <div class="book-list">
+        {
+          bibleBooks.map((book) => (
+            <article class="book-card">
+              <p class="eyebrow">{book.chapters.length} chương mẫu</p>
+              <h3><a href={`/kinh-thanh/${book.slug}/`}>{book.book}</a></h3>
+              <a class="text-link" href={`/kinh-thanh/${book.slug}/1/`}>Mở chương 1 →</a>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</BaseLayout>

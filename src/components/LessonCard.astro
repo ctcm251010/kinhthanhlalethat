@@ -1,0 +1,25 @@
+---
+import type { TruthLesson, TruthTopic } from '@/utils/content';
+import { formatDate } from '@/utils/content';
+
+interface Props {
+  lesson: TruthLesson;
+  topic: TruthTopic;
+  compact?: boolean;
+}
+
+const { lesson, topic, compact = false } = Astro.props;
+const href = `/le-that/${topic.data.slug}/${lesson.data.slug}/`;
+---
+
+<article class:list={['lesson-card', compact && 'lesson-card-compact']}>
+  <div class="lesson-card-topline">
+    <span>{topic.data.title}</span>
+    <time datetime={lesson.data.publishedDate.toISOString()}>{formatDate(lesson.data.publishedDate)}</time>
+  </div>
+  <h3><a href={href}>{lesson.data.title}</a></h3>
+  <p>{lesson.data.description}</p>
+  <a class="text-link" href={href} aria-label={`Đọc bài ${lesson.data.title}`}>
+    Đọc bài <span aria-hidden="true">→</span>
+  </a>
+</article>

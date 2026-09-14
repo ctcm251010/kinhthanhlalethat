@@ -1,0 +1,38 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import TopicCard from '@/components/TopicCard.astro';
+import { getPublishedLessons, getPublishedTopics } from '@/utils/content';
+
+const [topics, lessons] = await Promise.all([getPublishedTopics(), getPublishedLessons()]);
+---
+
+<BaseLayout
+  title="Lẽ Thật"
+  description="Học Kinh Thánh theo các chủ đề rõ ràng, mỗi chủ đề gồm một chuỗi bài có liên hệ với nhau."
+>
+  <section class="page-hero">
+    <div class="page-shell">
+      <Breadcrumbs items={[{ label: 'Trang chủ', href: '/' }, { label: 'Lẽ Thật' }]} />
+      <div class="page-hero-inner">
+        <p class="eyebrow">Thư viện bài học</p>
+        <h1>Học theo chủ đề, không phải một danh sách rời rạc.</h1>
+        <p>Mỗi chủ đề tạo thành một lộ trình nhỏ để bạn đọc theo mạch, xem lại và tiếp tục khi sẵn sàng.</p>
+      </div>
+    </div>
+  </section>
+  <section class="page-section">
+    <div class="page-shell">
+      <div class="topic-grid">
+        {
+          topics.map((topic) => (
+            <TopicCard
+              topic={topic}
+              lessonCount={lessons.filter((lesson) => lesson.data.topic.id === topic.id).length}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>

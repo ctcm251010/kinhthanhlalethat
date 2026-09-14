@@ -1,0 +1,30 @@
+---
+interface Props {
+  name: 'compass' | 'seedling' | 'lamp';
+}
+const { name } = Astro.props;
+---
+
+<span class="topic-icon" aria-hidden="true">
+  {
+    name === 'compass' && (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+        <circle cx="12" cy="12" r="8.5" /><path d="m15.4 8.6-2.1 4.7-4.7 2.1 2.1-4.7 4.7-2.1Z" />
+      </svg>
+    )
+  }
+  {
+    name === 'seedling' && (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+        <path d="M12 21v-8.5M12 13c-4.8 0-7.2-2.5-7.5-7.5 4.9.1 7.4 2.6 7.5 7.5Zm0 3c.1-4.2 2.5-6.4 7.3-6.5-.2 4.5-2.6 6.6-7.3 6.5Z" />
+      </svg>
+    )
+  }
+  {
+    name === 'lamp' && (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+        <path d="M8 21h8M9.5 17.5h5M8 10.2a4 4 0 1 1 8 0c0 1.8-1.1 2.9-2 4.3h-4c-.9-1.4-2-2.5-2-4.3Z" /><path d="M12 2V.8M4.8 4.8 3.9 3.9M19.2 4.8l.9-.9" />
+      </svg>
+    )
+  }
+</span>

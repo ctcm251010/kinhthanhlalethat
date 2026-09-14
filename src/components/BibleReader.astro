@@ -1,0 +1,113 @@
+---
+import type { BibleBook, BibleChapter } from '@/data/bible';
+
+interface Props {
+  books: BibleBook[];
+  book: BibleBook;
+  chapter: BibleChapter;
+  headingLevel?: 'h1' | 'h2';
+}
+
+const { books, book, chapter, headingLevel = 'h1' } = Astro.props;
+const Heading = headingLevel;
+const chapterIndex = book.chapters.findIndex((item) => item.chapter === chapter.chapter);
+const bookIndex = books.findIndex((item) => item.slug === book.slug);
+const previousBook = bookIndex > 0 ? books[bookIndex - 1] : undefined;
+const nextBook = bookIndex >= 0 && bookIndex < books.length - 1 ? books[bookIndex + 1] : undefined;
+const previousChapterInBook = chapterIndex > 0 ? book.chapters[chapterIndex - 1] : undefined;
+const nextChapterInBook =
+  chapterIndex >= 0 && chapterIndex < book.chapters.length - 1
+    ? book.chapters[chapterIndex + 1]
+    : undefined;
+const previousChapter =
+  previousChapterInBook
+    ? { book, chapter: previousChapterInBook }
+    : previousBook && previousBook.chapters.length > 0
+      ? { book: previousBook, chapter: previousBook.chapters.at(-1)! }
+      : undefined;
+const nextChapter =
+  nextChapterInBook
+    ? { book, chapter: nextChapterInBook }
+    : nextBook && nextBook.chapters.length > 0
+      ? { book: nextBook, chapter: nextBook.chapters[0]! }
+      : undefined;
+
+const chapterHref = (targetBook: BibleBook, targetChapter: BibleChapter) =>
+  `/kinh-thanh/${targetBook.slug}/${targetChapter.chapter}/`;
+---
+
+<section class="reader-panel" aria-labelledby="reader-title">
+  <div class="reader-toolbar">
+    <div class="field-group">
+      <label for="book-select">Sách</label>
+      <select id="book-select" data-route-select>
+        {
+          books.map((item) => (
+            <option value={`/kinh-thanh/${item.slug}/1/`} selected={item.slug === book.slug}>
+              {item.book}
+            </option>
+          ))
+        }
+      </select>
+    </div>
+    <div class="field-group">
+      <label for="chapter-select">Chương</label>
+      <select id="chapter-select" data-route-select>
+        {
+          book.chapters.map((item) => (
+            <option value={chapterHref(book, item)} selected={item.chapter === chapter.chapter}>
+              Chương {item.chapter}
+            </option>
+          ))
+        }
+      </select>
+    </div>
+    <span class="reader-count">{chapter.verses.length} câu mẫu</span>
+  </div>
+
+  <div class="reader-content">
+    <Heading id="reader-title">{`${book.book} ${chapter.chapter}`}</Heading>
+    <p class="sample-notice">
+      Đây là dữ liệu giữ chỗ để kiểm tra kiến trúc và giao diện. Nội dung Kinh Thánh đầy đủ chưa được nhập.
+    </p>
+    <ol class="verse-list">
+      {
+        chapter.verses.map((verse) => (
+          <li id={`cau-${verse.verse}`}>
+            <span class="verse-number" aria-label={`Câu ${verse.verse}`}>{verse.verse}</span>
+            {verse.text}
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+
+  <nav class="reader-navigation" aria-label="Chuyển chương">
+    {
+      previousChapter ? (
+        <a class="button button-secondary" href={chapterHref(previousChapter.book, previousChapter.chapter)}>
+          <span aria-hidden="true">←</span>&nbsp; Chương trước
+        </a>
+      ) : (
+        <span />
+      )
+    }
+    {
+      nextChapter ? (
+        <a class="button button-secondary" href={chapterHref(nextChapter.book, nextChapter.chapter)}>
+          Chương sau &nbsp;<span aria-hidden="true">→</span>
+        </a>
+      ) : (
+        <span />
+      )
+    }
+  </nav>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLSelectElement>('[data-route-select]').forEach((select) => {
+    select.addEventListener('change', () => {
+      if (select.value.startsWith('/kinh-thanh/')) window.location.assign(select.value);
+    });
+  });
+</script>

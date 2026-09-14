@@ -1,0 +1,97 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import { siteConfig } from '@/config/site';
+---
+
+<BaseLayout title="Liên hệ" description="Gửi góp ý hoặc kết nối với ban biên tập Kinh Thánh Là Lẽ Thật.">
+  <section class="page-hero">
+    <div class="page-shell">
+      <Breadcrumbs items={[{ label: 'Trang chủ', href: '/' }, { label: 'Liên hệ' }]} />
+      <div class="page-hero-inner">
+        <p class="eyebrow">Kết nối</p>
+        <h1>Chúng tôi muốn lắng nghe góp ý của bạn.</h1>
+        <p>Các kênh bên dưới đang dùng thông tin giữ chỗ. Thông tin chính thức sẽ được cập nhật trước khi website phát hành.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="page-shell contact-grid">
+      <article class="contact-card">
+        <p class="eyebrow">Zalo</p>
+        <h2>Kết nối qua Zalo</h2>
+        <p>Đường dẫn chính thức chưa được cấu hình.</p>
+        <a class="text-link" href={siteConfig.contact.zalo}>Đi đến form góp ý →</a>
+      </article>
+      <article class="contact-card">
+        <p class="eyebrow">Telegram</p>
+        <h2>Nhắn qua Telegram</h2>
+        <p>Tài khoản Telegram sẽ được bổ sung trước khi deploy production.</p>
+        <a class="text-link" href={siteConfig.contact.telegram}>Đi đến form góp ý →</a>
+      </article>
+      <article class="contact-card">
+        <p class="eyebrow">Email</p>
+        <h2>Gửi email</h2>
+        <p>Email hiện tại là placeholder và cần được thay thế.</p>
+        <a class="text-link" href={siteConfig.contact.email}>hello@example.com →</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="page-section page-section-muted" id="contact-form">
+    <div class="page-shell contact-form-wrap">
+      <div>
+        <p class="eyebrow">Gửi góp ý</p>
+        <h2>Một lời nhắn ngắn</h2>
+        <p>Form đã tách khỏi submission service để có thể nối Cloudflare Worker hoặc email service ở phase sau.</p>
+      </div>
+      <form class="contact-form" data-contact-form novalidate>
+        <div class="field-group">
+          <label for="name">Tên</label>
+          <input id="name" name="name" autocomplete="name" required minlength="2" />
+        </div>
+        <div class="field-group">
+          <label for="contact">Email hoặc thông tin liên hệ</label>
+          <input id="contact" name="contact" autocomplete="email" required />
+        </div>
+        <div class="field-group">
+          <label for="message">Nội dung góp ý</label>
+          <textarea id="message" name="message" required minlength="10"></textarea>
+        </div>
+        <div class="turnstile-placeholder" aria-label="Vị trí dành cho Cloudflare Turnstile">
+          Turnstile sẽ được kích hoạt khi có endpoint gửi form.
+        </div>
+        <p class="form-note">Form chưa kết nối dịch vụ gửi. Dữ liệu sẽ không được gửi ở base version.</p>
+        <p class="form-status" data-form-status role="status" aria-live="polite" hidden></p>
+        <button class="button button-primary" type="submit">Gửi góp ý</button>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { submitContactForm } from '@/services/contact';
+
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  const status = document.querySelector<HTMLElement>('[data-form-status]');
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!form.reportValidity() || !status) return;
+
+    const result = await submitContactForm(form);
+    status.hidden = false;
+    if (!result.ok) {
+      status.dataset.state = 'error';
+      status.textContent = result.reason === 'unconfigured'
+        ? 'Form chưa được kết nối nên nội dung chưa được gửi. Vui lòng dùng kênh liên hệ chính thức sau khi được cập nhật.'
+        : 'Không thể gửi nội dung lúc này. Vui lòng thử lại sau.';
+      return;
+    }
+
+    status.dataset.state = 'success';
+    status.textContent = 'Nội dung đã được gửi.';
+    form.reset();
+  });
+</script>

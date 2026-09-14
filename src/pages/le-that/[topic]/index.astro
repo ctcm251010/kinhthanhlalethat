@@ -1,0 +1,54 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import TopicIcon from '@/components/TopicIcon.astro';
+import LessonCard from '@/components/LessonCard.astro';
+import { getPublishedLessons, getPublishedTopics, type TruthTopic } from '@/utils/content';
+
+export const getStaticPaths = (async () => {
+  const topics = await getPublishedTopics();
+  return topics.map((topic) => ({ params: { topic: topic.data.slug }, props: { topic } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  topic: TruthTopic;
+}
+
+const { topic } = Astro.props;
+const lessons = (await getPublishedLessons())
+  .filter((lesson) => lesson.data.topic.id === topic.id)
+  .sort((a, b) => a.data.publishedDate.getTime() - b.data.publishedDate.getTime());
+---
+
+<BaseLayout title={topic.data.title} description={topic.data.description}>
+  <div class="page-shell">
+    <Breadcrumbs
+      items={[
+        { label: 'Trang chủ', href: '/' },
+        { label: 'Lẽ Thật', href: '/le-that/' },
+        { label: topic.data.title },
+      ]}
+    />
+    <header class="topic-intro page-section">
+      <TopicIcon name={topic.data.icon} />
+      <div>
+        <p class="eyebrow">Chủ đề · {lessons.length} bài học</p>
+        <h1>{topic.data.title}</h1>
+        <p>{topic.data.description}</p>
+      </div>
+    </header>
+    <section class="page-section" aria-labelledby="lesson-list-title">
+      <h2 id="lesson-list-title">Các bài trong chủ đề</h2>
+      {
+        lessons.length > 0 ? (
+          <div class="topic-lesson-list">
+            {lessons.map((lesson) => <LessonCard lesson={lesson} topic={topic} compact />)}
+          </div>
+        ) : (
+          <p class="empty-state">Chủ đề này đang được biên tập. Vui lòng quay lại sau.</p>
+        )
+      }
+    </section>
+  </div>
+</BaseLayout>

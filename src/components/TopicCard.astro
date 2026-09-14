@@ -1,0 +1,25 @@
+---
+import TopicIcon from './TopicIcon.astro';
+import type { TruthTopic } from '@/utils/content';
+
+interface Props {
+  topic: TruthTopic;
+  lessonCount: number;
+}
+
+const { topic, lessonCount } = Astro.props;
+---
+
+<article class="topic-card">
+  <TopicIcon name={topic.data.icon} />
+  <div>
+    <h3><a href={`/le-that/${topic.data.slug}/`}>{topic.data.title}</a></h3>
+    <p>{topic.data.description}</p>
+  </div>
+  <div class="card-footer">
+    <span>{lessonCount} bài học</span>
+    <a class="text-link" href={`/le-that/${topic.data.slug}/`} aria-label={`Xem chủ đề ${topic.data.title}`}>
+      Xem chủ đề <span aria-hidden="true">→</span>
+    </a>
+  </div>
+</article>

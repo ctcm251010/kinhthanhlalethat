@@ -1,0 +1,38 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import BibleReader from '@/components/BibleReader.astro';
+import { bibleBooks, type BibleBook, type BibleChapter } from '@/data/bible';
+
+export const getStaticPaths = (() =>
+  bibleBooks.flatMap((book) =>
+    book.chapters.map((chapter) => ({
+      params: { book: book.slug, chapter: String(chapter.chapter) },
+      props: { book, chapter },
+    })),
+  )) satisfies GetStaticPaths;
+
+interface Props {
+  book: BibleBook;
+  chapter: BibleChapter;
+}
+const { book, chapter } = Astro.props;
+---
+
+<BaseLayout
+  title={`${book.book} ${chapter.chapter}`}
+  description={`Đọc ${book.book} chương ${chapter.chapter} theo từng câu.`}
+>
+  <div class="page-shell reader-shell">
+    <Breadcrumbs
+      items={[
+        { label: 'Trang chủ', href: '/' },
+        { label: 'Kinh Thánh', href: '/kinh-thanh/' },
+        { label: book.book, href: `/kinh-thanh/${book.slug}/` },
+        { label: `Chương ${chapter.chapter}` },
+      ]}
+    />
+    <BibleReader books={bibleBooks} book={book} chapter={chapter} />
+  </div>
+</BaseLayout>

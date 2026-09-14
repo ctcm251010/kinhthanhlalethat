@@ -1,0 +1,95 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import ArticleLayout from '@/layouts/ArticleLayout.astro';
+import LessonCard from '@/components/LessonCard.astro';
+import YouTube from '@/components/mdx/YouTube.astro';
+import BibleQuote from '@/components/mdx/BibleQuote.astro';
+import Callout from '@/components/mdx/Callout.astro';
+import Figure from '@/components/mdx/Figure.astro';
+import {
+  formatDate,
+  getPublishedLessons,
+  getTopicForLesson,
+  type TruthLesson,
+  type TruthTopic,
+} from '@/utils/content';
+
+export const getStaticPaths = (async () => {
+  const lessons = await getPublishedLessons();
+  return Promise.all(
+    lessons.map(async (lesson) => {
+      const topic = await getTopicForLesson(lesson);
+      return {
+        params: { topic: topic.data.slug, slug: lesson.data.slug },
+        props: { lesson, topic },
+      };
+    }),
+  );
+}) satisfies GetStaticPaths;
+
+interface Props {
+  lesson: TruthLesson;
+  topic: TruthTopic;
+}
+
+const { lesson, topic } = Astro.props as Props;
+const { Content, headings } = await render(lesson as CollectionEntry<'truthLessons'>);
+const topicLessons = (await getPublishedLessons())
+  .filter((item) => item.data.topic.id === topic.id)
+  .sort((a, b) => a.data.publishedDate.getTime() - b.data.publishedDate.getTime());
+const currentIndex = topicLessons.findIndex((item) => item.id === lesson.id);
+const previousLesson = currentIndex > 0 ? topicLessons[currentIndex - 1] : undefined;
+const nextLesson = currentIndex < topicLessons.length - 1 ? topicLessons[currentIndex + 1] : undefined;
+const relatedLessons = topicLessons.filter((item) => item.id !== lesson.id).slice(0, 2);
+---
+
+<ArticleLayout
+  title={lesson.data.title}
+  description={lesson.data.description}
+  topicTitle={topic.data.title}
+  topicSlug={topic.data.slug}
+  publishedLabel={formatDate(lesson.data.publishedDate)}
+  updatedLabel={lesson.data.updatedDate ? formatDate(lesson.data.updatedDate) : undefined}
+  author={lesson.data.author}
+  headings={headings}
+  seoTitle={lesson.data.seoTitle}
+  seoDescription={lesson.data.seoDescription}
+>
+  <Content components={{ YouTube, BibleQuote, Callout, Figure }} />
+
+  <div slot="after-article" class="article-footer">
+    {
+      relatedLessons.length > 0 && (
+        <section aria-labelledby="related-title">
+          <h2 id="related-title">Đọc tiếp trong chủ đề</h2>
+          <div class="topic-lesson-list">
+            {relatedLessons.map((item) => <LessonCard lesson={item} topic={topic} compact />)}
+          </div>
+        </section>
+      )
+    }
+    <nav class="article-navigation" aria-label="Bài trước và bài sau">
+      {
+        previousLesson ? (
+          <a class="article-nav-link" href={`/le-that/${topic.data.slug}/${previousLesson.data.slug}/`}>
+            <span>← Bài trước</span>
+            <strong>{previousLesson.data.title}</strong>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        nextLesson ? (
+          <a class="article-nav-link" href={`/le-that/${topic.data.slug}/${nextLesson.data.slug}/`}>
+            <span>Bài sau →</span>
+            <strong>{nextLesson.data.title}</strong>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+    </nav>
+  </div>
+</ArticleLayout>

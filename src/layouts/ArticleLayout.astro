@@ -1,0 +1,77 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  title: string;
+  description: string;
+  topicTitle: string;
+  topicSlug: string;
+  publishedLabel: string;
+  updatedLabel?: string | undefined;
+  author?: string | undefined;
+  headings?: MarkdownHeading[] | undefined;
+  seoTitle?: string | undefined;
+  seoDescription?: string | undefined;
+}
+
+const {
+  title,
+  description,
+  topicTitle,
+  topicSlug,
+  publishedLabel,
+  updatedLabel,
+  author,
+  headings = [],
+  seoTitle,
+  seoDescription,
+} = Astro.props;
+const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+---
+
+<BaseLayout title={seoTitle ?? title} description={seoDescription ?? description} article>
+  <div class="article-shell page-shell">
+    <Breadcrumbs
+      items={[
+        { label: 'Trang chủ', href: '/' },
+        { label: 'Lẽ Thật', href: '/le-that/' },
+        { label: topicTitle, href: `/le-that/${topicSlug}/` },
+        { label: title },
+      ]}
+    />
+    <div class="article-grid">
+      <article class="article">
+        <header class="article-header">
+          <a class="eyebrow" href={`/le-that/${topicSlug}/`}>{topicTitle}</a>
+          <h1>{title}</h1>
+          <p class="article-lead">{description}</p>
+          <div class="article-meta">
+            {author && <span>{author}</span>}
+            <span>Đăng {publishedLabel}</span>
+            {updatedLabel && <span>Cập nhật {updatedLabel}</span>}
+          </div>
+        </header>
+        <div class="prose">
+          <slot />
+        </div>
+        <slot name="after-article" />
+      </article>
+      {
+        toc.length >= 2 && (
+          <aside class="table-of-contents" aria-label="Mục lục bài viết">
+            <p class="toc-title">Trong bài này</p>
+            <ol>
+              {toc.map((heading) => (
+                <li class:list={[heading.depth === 3 && 'toc-subitem']}>
+                  <a href={`#${heading.slug}`}>{heading.text}</a>
+                </li>
+              ))}
+            </ol>
+          </aside>
+        )
+      }
+    </div>
+  </div>
+</BaseLayout>

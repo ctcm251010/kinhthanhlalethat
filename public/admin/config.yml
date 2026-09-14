@@ -1,0 +1,90 @@
+local_backend: true
+
+backend:
+  name: github
+  repo: YOUR_GITHUB_USER/YOUR_REPOSITORY
+  branch: main
+  base_url: https://YOUR-OAUTH-WORKER.YOUR-SUBDOMAIN.workers.dev
+  auth_endpoint: auth
+  squash_merges: true
+
+publish_mode: editorial_workflow
+media_folder: public/uploads
+public_folder: /uploads
+site_url: https://example.com
+display_url: https://example.com
+logo_url: /favicon.svg
+locale: vi
+
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: "-"
+
+collections:
+  - name: truthTopics
+    label: Chủ đề Lẽ Thật
+    label_singular: Chủ đề
+    folder: src/content/truth-topics
+    create: true
+    extension: md
+    format: frontmatter
+    identifier_field: slug
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    sortable_fields: [order, title]
+    fields:
+      - { label: Tên chủ đề, name: title, widget: string }
+      - { label: Slug, name: slug, widget: string, hint: "Chữ thường không dấu, dùng dấu gạch ngang." }
+      - { label: Mô tả, name: description, widget: text }
+      - { label: Thứ tự, name: order, widget: number, value_type: int, min: 0 }
+      - label: Icon
+        name: icon
+        widget: select
+        options:
+          - { label: La bàn, value: compass }
+          - { label: Mầm cây, value: seedling }
+          - { label: Đèn, value: lamp }
+      - { label: Ảnh bìa, name: coverImage, widget: image, required: false }
+      - { label: Nổi bật, name: featured, widget: boolean, default: false }
+      - { label: Bản nháp, name: draft, widget: boolean, default: true }
+      - { label: Nội dung giới thiệu, name: body, widget: markdown, required: false }
+
+  - name: truthLessons
+    label: Bài học Lẽ Thật
+    label_singular: Bài học
+    folder: src/content/truth-lessons
+    create: true
+    extension: mdx
+    format: frontmatter
+    identifier_field: slug
+    slug: "{{slug}}"
+    summary: "{{title}} — {{topic}}"
+    sortable_fields: [publishedDate, title, topic]
+    view_filters:
+      - { label: Bản nháp, field: draft, pattern: true }
+      - { label: Nổi bật, field: featured, pattern: true }
+    fields:
+      - { label: Tiêu đề, name: title, widget: string }
+      - { label: Slug, name: slug, widget: string, hint: "Chữ thường không dấu, dùng dấu gạch ngang." }
+      - { label: Mô tả ngắn, name: description, widget: text }
+      - label: Chủ đề
+        name: topic
+        widget: relation
+        collection: truthTopics
+        search_fields: [title, slug]
+        display_fields: [title]
+        value_field: slug
+      - { label: Ngày đăng, name: publishedDate, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD }
+      - { label: Ngày cập nhật, name: updatedDate, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD, required: false }
+      - { label: Tác giả, name: author, widget: string, required: false }
+      - { label: Ảnh bìa, name: coverImage, widget: image, required: false }
+      - { label: Nổi bật, name: featured, widget: boolean, default: false }
+      - { label: Bản nháp, name: draft, widget: boolean, default: true }
+      - { label: SEO title, name: seoTitle, widget: string, required: false, hint: "Tối đa 65 ký tự." }
+      - { label: SEO description, name: seoDescription, widget: text, required: false, hint: "Tối đa 160 ký tự." }
+      - label: Nội dung bài
+        name: body
+        widget: markdown
+        modes: [rich_text, raw]
+        hint: "Dùng semantic heading, list và quote. Chuyển sang Raw khi cần chỉnh MDX component."

@@ -1,0 +1,20 @@
+---
+// Trang CMS tách khỏi layout công khai và không được index bởi search engine.
+---
+
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="color-scheme" content="light" />
+    <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
+    <title>Quản lý nội dung | Kinh Thánh Là Lẽ Thật</title>
+  </head>
+  <body>
+    <noscript>Bạn cần bật JavaScript để sử dụng trình quản lý nội dung.</noscript>
+    <script is:inline src="https://unpkg.com/decap-cms@3.16.2/dist/decap-cms.js"></script>
+    <script is:inline src="/admin/editor-components.js"></script>
+  </body>
+</html>

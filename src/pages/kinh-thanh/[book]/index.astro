@@ -1,0 +1,30 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import BibleReader from '@/components/BibleReader.astro';
+import { bibleBooks, type BibleBook } from '@/data/bible';
+
+export const getStaticPaths = (() =>
+  bibleBooks.map((book) => ({ params: { book: book.slug }, props: { book } }))) satisfies GetStaticPaths;
+
+interface Props {
+  book: BibleBook;
+}
+const { book } = Astro.props;
+const chapter = book.chapters[0];
+if (!chapter) throw new Error(`Sách ${book.book} cần có ít nhất một chương.`);
+---
+
+<BaseLayout title={book.book} description={`Đọc ${book.book} theo chương và câu.`}>
+  <div class="page-shell reader-shell">
+    <Breadcrumbs
+      items={[
+        { label: 'Trang chủ', href: '/' },
+        { label: 'Kinh Thánh', href: '/kinh-thanh/' },
+        { label: book.book },
+      ]}
+    />
+    <BibleReader books={bibleBooks} book={book} chapter={chapter} />
+  </div>
+</BaseLayout>

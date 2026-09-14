@@ -1,0 +1,24 @@
+{
+  "book": "Sáng Thế Ký",
+  "slug": "sang-the-ky",
+  "abbreviation": "STK",
+  "testament": "old",
+  "chapters": [
+    {
+      "chapter": 1,
+      "verses": [
+        { "verse": 1, "text": "[Dữ liệu mẫu — nội dung câu 1 sẽ được nhập từ nguồn Kinh Thánh 1925 đã xác minh.]" },
+        { "verse": 2, "text": "[Dữ liệu mẫu — nội dung câu 2 chưa được nhập.]" },
+        { "verse": 3, "text": "[Dữ liệu mẫu — nội dung câu 3 chưa được nhập.]" }
+      ]
+    },
+    {
+      "chapter": 2,
+      "verses": [
+        { "verse": 1, "text": "[Dữ liệu mẫu — nội dung câu 1 sẽ được nhập từ nguồn đã xác minh.]" },
+        { "verse": 2, "text": "[Dữ liệu mẫu — nội dung câu 2 chưa được nhập.]" },
+        { "verse": 3, "text": "[Dữ liệu mẫu — nội dung câu 3 chưa được nhập.]" }
+      ]
+    }
+  ]
+}
