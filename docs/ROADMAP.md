@@ -21,6 +21,7 @@
 - [x] Kết nối GitHub repository `ctcm251010/kinhthanhlalethat` và push branch `main`.
 - [ ] Phân quyền repository cho editor được phép xuất bản.
 - [x] Xây và kiểm thử OAuth proxy Cloudflare Worker cho Decap CMS.
+- [x] Làm mới trang chi tiết “Lẽ Thật” theo hướng article hero và một cột đọc tập trung.
 - [ ] Tạo GitHub OAuth App, nhập Worker secrets, deploy OAuth proxy và smoke test workflow thật.
 - [x] Kết nối Workers Builds với GitHub, bật non-production branch builds và deploy trên `workers.dev`.
 - [ ] Kết nối custom domain và thay URL canonical tạm thời.

@@ -34,7 +34,7 @@ interface Props {
 }
 
 const { lesson, topic } = Astro.props as Props;
-const { Content, headings } = await render(lesson as CollectionEntry<'truthLessons'>);
+const { Content } = await render(lesson as CollectionEntry<'truthLessons'>);
 const topicLessons = (await getPublishedLessons())
   .filter((item) => item.data.topic.id === topic.id)
   .sort((a, b) => a.data.publishedDate.getTime() - b.data.publishedDate.getTime());
@@ -52,7 +52,7 @@ const relatedLessons = topicLessons.filter((item) => item.id !== lesson.id).slic
   publishedLabel={formatDate(lesson.data.publishedDate)}
   updatedLabel={lesson.data.updatedDate ? formatDate(lesson.data.updatedDate) : undefined}
   author={lesson.data.author}
-  headings={headings}
+  coverImage={lesson.data.coverImage}
   seoTitle={lesson.data.seoTitle}
   seoDescription={lesson.data.seoDescription}
 >

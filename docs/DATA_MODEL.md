@@ -28,7 +28,7 @@ Mỗi lesson là một file Markdown hoặc MDX trong `src/content/truth-lessons
 | `publishedDate` | date | Có | Ngày xuất bản |
 | `updatedDate` | date | Không | Ngày cập nhật |
 | `author` | string | Không | Tác giả |
-| `coverImage` | string | Không | Media tùy chọn |
+| `coverImage` | string | Không | Ảnh hero của bài; dùng ảnh mặc định của website nếu bỏ trống |
 | `featured` | boolean | Có | Đánh dấu nổi bật |
 | `draft` | boolean | Có | Loại khỏi site production khi `true` |
 | `seoTitle` | string | Không | Ghi đè SEO title |

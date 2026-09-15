@@ -38,6 +38,7 @@ Luồng xuất bản dự kiến:
 - Dùng MDX chỉ cho lesson cần component giàu nội dung; Markdown thường vẫn được hỗ trợ.
 - Menu mobile dùng HTML/CSS và JavaScript tối thiểu, không hydrate framework.
 - Typography dùng Noto Sans self-host qua Fontsource cho toàn website; chỉ đóng gói subset Latin/Vietnamese và các weight thực tế để không phụ thuộc font CDN khi runtime.
+- Trang chi tiết “Lẽ Thật” dùng article hero toàn chiều rộng, ưu tiên `coverImage` của lesson và dùng ảnh đọc Kinh Thánh sẵn có làm fallback; phần thân giữ một cột đọc hẹp, không dùng sidebar để giảm phân tán khi đọc dài.
 - Bible Reader đọc JSON qua module dữ liệu, không nhúng toàn bộ nội dung vào component.
 - Form liên hệ hiện chỉ là UI, không hiển thị trạng thái gửi thành công giả. Endpoint được để trống trong config cho phase sau.
 - Decap CMS dùng GitHub backend và đã trỏ tới repository `ctcm251010/kinhthanhlalethat`; OAuth proxy dùng GitHub OAuth App với scope `public_repo` vì repository đang public.

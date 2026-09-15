@@ -17,7 +17,7 @@ Kiểm tra ở desktop, tablet và mobile:
 2. Trang chủ hiển thị topic/lesson từ Content Collections.
 3. `/kinh-thanh/` đổi sách, đổi chương, đi chương trước/sau.
 4. `/le-that/` dẫn đến topic, lesson và breadcrumb đúng.
-5. Article có một H1, mục lục, component MDX, related và previous/next.
+5. Article có một H1 phủ trên ảnh hero, thân bài một cột dễ đọc, component MDX, related và previous/next; ảnh mặc định và `coverImage` riêng đều không gây layout shift hoặc tràn ngang.
 6. `/lien-he/` báo rõ form chưa kết nối, không hiển thị gửi thành công giả.
 7. `/admin/` tải Decap CMS, đọc đúng `config.yml` và local backend.
 8. Route không tồn tại trả trang 404.
@@ -44,3 +44,11 @@ Kiểm tra ở desktop, tablet và mobile:
 - Decap local backend tải đủ hai collection, ba topic mẫu và các field editor.
 
 Dev dependency `decap-server` hiện kéo theo advisory prototype pollution mức thấp trong `@hapi/joi` và chưa có bản sửa upstream. Dependency này chỉ dùng cho CMS proxy ở local, không nằm trong output production; cần kiểm tra lại khi Decap phát hành bản cập nhật.
+
+## Kết quả làm mới layout bài “Lẽ Thật” — 15/09/2026
+
+- `npm run typecheck`: đạt.
+- `npm run check`: đạt, 0 error/0 warning/0 hint.
+- `npm run build`: đạt, sinh 21 page/endpoint và các kích thước WebP tối ưu cho ảnh hero.
+- `npm run check:links`: đạt, không có internal link bị thiếu.
+- Browser QA tại desktop và viewport gọn 500px: ảnh hero, tiêu đề, metadata, nội dung một cột, menu mobile và BibleQuote không tràn ngang; tiêu đề vẫn dễ đọc trên nền ảnh.

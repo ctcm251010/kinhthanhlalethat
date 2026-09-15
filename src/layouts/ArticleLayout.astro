@@ -1,7 +1,8 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import BaseLayout from './BaseLayout.astro';
-import Breadcrumbs from '@/components/Breadcrumbs.astro';
-import type { MarkdownHeading } from 'astro';
+import defaultArticleHero from '@/assets/hero-reading.png';
 
 interface Props {
   title: string;
@@ -11,7 +12,7 @@ interface Props {
   publishedLabel: string;
   updatedLabel?: string | undefined;
   author?: string | undefined;
-  headings?: MarkdownHeading[] | undefined;
+  coverImage?: ImageMetadata | undefined;
   seoTitle?: string | undefined;
   seoDescription?: string | undefined;
 }
@@ -24,54 +25,35 @@ const {
   publishedLabel,
   updatedLabel,
   author,
-  headings = [],
+  coverImage,
   seoTitle,
   seoDescription,
 } = Astro.props;
-const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const heroImage = coverImage ?? defaultArticleHero;
 ---
 
 <BaseLayout title={seoTitle ?? title} description={seoDescription ?? description} article>
-  <div class="article-shell page-shell">
-    <Breadcrumbs
-      items={[
-        { label: 'Trang chủ', href: '/' },
-        { label: 'Lẽ Thật', href: '/le-that/' },
-        { label: topicTitle, href: `/le-that/${topicSlug}/` },
-        { label: title },
-      ]}
-    />
-    <div class="article-grid">
-      <article class="article">
-        <header class="article-header">
-          <a class="eyebrow" href={`/le-that/${topicSlug}/`}>{topicTitle}</a>
-          <h1>{title}</h1>
-          <p class="article-lead">{description}</p>
-          <div class="article-meta">
-            {author && <span>{author}</span>}
-            <span>Đăng {publishedLabel}</span>
-            {updatedLabel && <span>Cập nhật {updatedLabel}</span>}
-          </div>
-        </header>
-        <div class="prose">
-          <slot />
+  <article class="article-shell">
+    <header class="article-hero">
+      <Image class="article-hero-image" src={heroImage} alt="" loading="eager" />
+      <div class="article-hero-shade" aria-hidden="true"></div>
+      <div class="article-hero-content page-shell">
+        <a class="article-topic" href={`/le-that/${topicSlug}/`}>{topicTitle}</a>
+        <h1>{title}</h1>
+        <div class="article-meta">
+          {author && <span>{author}</span>}
+          <span>Đăng {publishedLabel}</span>
+          {updatedLabel && <span>Cập nhật {updatedLabel}</span>}
         </div>
-        <slot name="after-article" />
-      </article>
-      {
-        toc.length >= 2 && (
-          <aside class="table-of-contents" aria-label="Mục lục bài viết">
-            <p class="toc-title">Trong bài này</p>
-            <ol>
-              {toc.map((heading) => (
-                <li class:list={[heading.depth === 3 && 'toc-subitem']}>
-                  <a href={`#${heading.slug}`}>{heading.text}</a>
-                </li>
-              ))}
-            </ol>
-          </aside>
-        )
-      }
+      </div>
+    </header>
+
+    <div class="article-body page-shell">
+      <p class="article-lead">{description}</p>
+      <div class="prose">
+        <slot />
+      </div>
+      <slot name="after-article" />
     </div>
-  </div>
+  </article>
 </BaseLayout>
