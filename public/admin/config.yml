@@ -4,8 +4,8 @@ backend:
   name: github
   repo: ctcm251010/kinhthanhlalethat
   branch: main
-  base_url: https://YOUR-OAUTH-WORKER.YOUR-SUBDOMAIN.workers.dev
-  auth_endpoint: auth
+  base_url: https://kinh-thanh-la-le-that-oauth.ctcm251010.workers.dev
+  auth_endpoint: /auth
   squash_merges: true
 
 publish_mode: editorial_workflow

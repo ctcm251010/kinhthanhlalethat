@@ -11,9 +11,11 @@ Cloudflare Workers Builds đã kết nối repository và deploy production tạ
 Luồng xuất bản dự kiến:
 
 1. Tác giả đăng nhập Decap CMS tại `/admin/`.
-2. Decap CMS tạo hoặc cập nhật file nội dung trong GitHub repository.
-3. Với `editorial_workflow`, bản nháp được quản lý bằng branch và pull request.
-4. Cloudflare Workers Builds nhận commit trên nhánh `main`, chạy build Astro và deploy thư mục `dist` dưới dạng Static Assets.
+2. Cửa sổ OAuth gọi Worker riêng tại `kinh-thanh-la-le-that-oauth.ctcm251010.workers.dev`; Worker xác thực `state` + PKCE, đổi code với GitHub và kiểm tra quyền push đúng repository.
+3. Decap CMS nhận token trực tiếp trong cửa sổ quản trị qua `window.postMessage`; Worker không lưu token.
+4. Decap CMS tạo hoặc cập nhật file nội dung trong GitHub repository.
+5. Với `editorial_workflow`, bản nháp được quản lý bằng branch và pull request.
+6. Cloudflare Workers Builds nhận commit trên nhánh `main`, chạy build Astro và deploy thư mục `dist` dưới dạng Static Assets.
 
 ## Các lớp chính
 
@@ -27,6 +29,7 @@ Luồng xuất bản dự kiến:
 - `src/styles`: design tokens và stylesheet dùng chung.
 - `public/admin`: Decap CMS và cấu hình collection.
 - `public/uploads`: media do CMS quản lý.
+- `workers/decap-oauth`: OAuth proxy độc lập cho Decap CMS, không dùng database hoặc dependency runtime.
 
 ## Quyết định kỹ thuật
 
@@ -37,12 +40,16 @@ Luồng xuất bản dự kiến:
 - Typography dùng Noto Sans self-host qua Fontsource cho toàn website; chỉ đóng gói subset Latin/Vietnamese và các weight thực tế để không phụ thuộc font CDN khi runtime.
 - Bible Reader đọc JSON qua module dữ liệu, không nhúng toàn bộ nội dung vào component.
 - Form liên hệ hiện chỉ là UI, không hiển thị trạng thái gửi thành công giả. Endpoint được để trống trong config cho phase sau.
-- Decap CMS dùng GitHub backend và đã trỏ tới repository `ctcm251010/kinhthanhlalethat`; OAuth proxy Cloudflare Worker chỉ được mô tả, chưa triển khai hoặc lưu secret.
+- Decap CMS dùng GitHub backend và đã trỏ tới repository `ctcm251010/kinhthanhlalethat`; OAuth proxy dùng GitHub OAuth App với scope `public_repo` vì repository đang public.
+- OAuth Worker dùng Web Crypto, PKCE S256, `state` trong cookie `HttpOnly`/`Secure`/`SameSite=Lax`, callback origin cố định và CSP nonce.
+- Sau khi đổi code lấy token, Worker gọi GitHub API để xác nhận token có quyền push vào đúng repository rồi mới trả token cho Decap. Token và authorization code không được ghi log.
 - Deploy dùng Cloudflare Workers Static Assets với Git integration; không cần Astro Cloudflare adapter vì toàn bộ route được prerender.
 
 ## Bảo mật và vận hành
 
 - Không commit OAuth client secret, API token hay thông tin liên hệ cá nhân.
+- `GITHUB_CLIENT_ID` và `GITHUB_CLIENT_SECRET` đều được lưu trong Cloudflare Worker Secrets; client ID vốn không bí mật nhưng để chung ở secrets giúp tránh bị config deploy ghi đè.
+- Observability của OAuth Worker xóa query string khỏi log vì callback URL chứa authorization code.
 - `/admin/` có `noindex` và chỉ tải Decap CMS từ CDN được ghim major version.
 - Decap chỉ cho phép các field và media path đã định nghĩa.
 - Nội dung Word được chuyển thành semantic Markdown; không lưu inline style tùy ý.
@@ -53,4 +60,4 @@ Luồng xuất bản dự kiến:
 - Chưa có dữ liệu Kinh Thánh 1925 đầy đủ.
 - Chưa có tìm kiếm, bookmark, copy/chia sẻ câu Kinh Thánh.
 - Chưa có backend gửi form.
-- Chưa có GitHub OAuth App, OAuth Worker hay credential production.
+- Mã OAuth Worker đã sẵn sàng nhưng GitHub OAuth App, Worker secrets và deployment production vẫn cần được tạo trên tài khoản của chủ dự án.

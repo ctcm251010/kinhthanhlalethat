@@ -1,0 +1,31 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "kinh-thanh-la-le-that-oauth",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-15",
+  "workers_dev": true,
+  "preview_urls": false,
+  "upload_source_maps": true,
+  "vars": {
+    "CMS_ORIGIN": "https://kinh-thanh-la-le-that.ctcm251010.workers.dev",
+    "OAUTH_ORIGIN": "https://kinh-thanh-la-le-that-oauth.ctcm251010.workers.dev",
+    "GITHUB_REPOSITORY": "ctcm251010/kinhthanhlalethat",
+    "GITHUB_SCOPE": "public_repo"
+  },
+  "secrets": {
+    "required": [
+      "GITHUB_CLIENT_ID",
+      "GITHUB_CLIENT_SECRET"
+    ]
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "redact_query_string": true,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "invocation_logs": true
+    }
+  }
+}

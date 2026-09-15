@@ -11,7 +11,12 @@
     "typecheck": "astro sync && tsc --noEmit",
     "check:links": "node scripts/check-links.mjs",
     "cms": "decap-server",
-    "deploy": "npm run build && wrangler deploy"
+    "deploy": "npm run build && wrangler deploy",
+    "oauth:types": "wrangler types --config workers/decap-oauth/wrangler.jsonc workers/decap-oauth/worker-configuration.d.ts",
+    "oauth:typecheck": "tsc --noEmit --project workers/decap-oauth/tsconfig.json",
+    "oauth:test": "node --test workers/decap-oauth/test/*.test.mjs",
+    "oauth:check": "npm run oauth:types && npm run oauth:typecheck && npm run oauth:test",
+    "oauth:deploy": "wrangler deploy --config workers/decap-oauth/wrangler.jsonc"
   },
   "dependencies": {
     "@astrojs/mdx": "8.0.1",

@@ -20,11 +20,14 @@
 - [ ] Cung cấp custom domain và thông tin contact thật; URL Workers hiện tại đã được cấu hình làm canonical tạm thời.
 - [x] Kết nối GitHub repository `ctcm251010/kinhthanhlalethat` và push branch `main`.
 - [ ] Phân quyền repository cho editor được phép xuất bản.
-- [ ] Tạo GitHub OAuth App và deploy OAuth proxy trên Cloudflare.
+- [x] Xây và kiểm thử OAuth proxy Cloudflare Worker cho Decap CMS.
+- [ ] Tạo GitHub OAuth App, nhập Worker secrets, deploy OAuth proxy và smoke test workflow thật.
 - [x] Kết nối Workers Builds với GitHub, bật non-production branch builds và deploy trên `workers.dev`.
 - [ ] Kết nối custom domain và thay URL canonical tạm thời.
 - [ ] Import dữ liệu Kinh Thánh 1925 từ nguồn đã xác minh.
 - [ ] Kết nối form liên hệ với Cloudflare Worker/Email Service và Turnstile.
+
+Contact thật, form liên hệ và custom domain đang chủ động hoãn. Việc import Kinh Thánh chỉ bắt đầu sau khi có giấy phép hoặc điều khoản API cho phép tái phân phối toàn văn; xem `docs/BIBLE_DATA_SOURCES.md`.
 
 ## Phase 3 — Mở rộng có kiểm chứng
 

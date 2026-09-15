@@ -130,10 +130,7 @@ Media upload được commit vào `public/uploads` và dùng URL `/uploads/<file
 
 Repository hiện tại là `https://github.com/ctcm251010/kinhthanhlalethat`, branch production `main`; `public/admin/config.yml` đã trỏ Decap CMS tới repository này.
 
-1. Tạo GitHub OAuth App và OAuth proxy Cloudflare Worker.
-2. Thay `base_url` bằng URL Worker; giữ client secret trong Cloudflare Worker Secrets.
-3. Cập nhật `site_url` và `display_url` bằng domain production.
-4. Test `editorial_workflow` trên repository thử nghiệm trước khi cho tác giả sử dụng.
+OAuth proxy đã nằm trong `workers/decap-oauth` và Decap đã trỏ tới URL Worker dự kiến. Hoàn tất các bước tạo GitHub OAuth App, nhập secrets, deploy và smoke test theo `docs/CMS_OAUTH.md`.
 
 Không commit `.env`, API token, OAuth secret hoặc credential cá nhân.
 
@@ -145,7 +142,7 @@ Không commit `.env`, API token, OAuth secret hoặc credential cá nhân.
 4. So sánh mẫu với nguồn gốc bằng kiểm tra thủ công độc lập.
 5. Thay dữ liệu giữ chỗ, chạy toàn bộ validation và browser QA.
 
-Không tự sinh câu Kinh Thánh bằng AI.
+Không tự sinh câu Kinh Thánh bằng AI và không scrape/copy toàn văn từ website chưa cấp quyền. Đánh giá nguồn hiện tại nằm ở `docs/BIBLE_DATA_SOURCES.md`.
 
 ## Deploy Cloudflare Workers
 
