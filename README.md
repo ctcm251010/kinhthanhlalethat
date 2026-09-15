@@ -128,11 +128,12 @@ Media upload được commit vào `public/uploads` và dùng URL `/uploads/<file
 
 ## GitHub và authentication
 
-1. Tạo repository GitHub và push branch `main`.
-2. Thay `YOUR_GITHUB_USER/YOUR_REPOSITORY` trong `public/admin/config.yml`.
-3. Tạo GitHub OAuth App và OAuth proxy Cloudflare Worker.
-4. Thay `base_url` bằng URL Worker; giữ client secret trong Cloudflare Worker Secrets.
-5. Test `editorial_workflow` trên repository thử nghiệm trước khi cho tác giả sử dụng.
+Repository hiện tại là `https://github.com/ctcm251010/kinhthanhlalethat`, branch production `main`; `public/admin/config.yml` đã trỏ Decap CMS tới repository này.
+
+1. Tạo GitHub OAuth App và OAuth proxy Cloudflare Worker.
+2. Thay `base_url` bằng URL Worker; giữ client secret trong Cloudflare Worker Secrets.
+3. Cập nhật `site_url` và `display_url` bằng domain production.
+4. Test `editorial_workflow` trên repository thử nghiệm trước khi cho tác giả sử dụng.
 
 Không commit `.env`, API token, OAuth secret hoặc credential cá nhân.
 

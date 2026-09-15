@@ -4,6 +4,8 @@
 
 Website sử dụng Astro với TypeScript ở chế độ static site generation (SSG). Nội dung được lưu trong Git và sinh thành HTML tại thời điểm build. Base version không có database, tài khoản độc giả hay backend riêng.
 
+Source code được lưu tại `https://github.com/ctcm251010/kinhthanhlalethat` trên branch production `main`.
+
 Luồng xuất bản dự kiến:
 
 1. Tác giả đăng nhập Decap CMS tại `/admin/`.
@@ -32,7 +34,7 @@ Luồng xuất bản dự kiến:
 - Menu mobile dùng HTML/CSS và JavaScript tối thiểu, không hydrate framework.
 - Bible Reader đọc JSON qua module dữ liệu, không nhúng toàn bộ nội dung vào component.
 - Form liên hệ hiện chỉ là UI, không hiển thị trạng thái gửi thành công giả. Endpoint được để trống trong config cho phase sau.
-- Decap CMS dùng GitHub backend; OAuth proxy Cloudflare Worker chỉ được mô tả, chưa triển khai hoặc lưu secret.
+- Decap CMS dùng GitHub backend và đã trỏ tới repository `ctcm251010/kinhthanhlalethat`; OAuth proxy Cloudflare Worker chỉ được mô tả, chưa triển khai hoặc lưu secret.
 - Deploy dùng Cloudflare Workers Static Assets với Git integration; không cần Astro Cloudflare adapter vì toàn bộ route được prerender.
 
 ## Bảo mật và vận hành

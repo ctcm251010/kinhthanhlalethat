@@ -18,7 +18,8 @@
 ## Phase 2 — Nội dung và tích hợp production
 
 - [ ] Cung cấp tên miền, URL canonical và thông tin contact thật.
-- [ ] Tạo GitHub repository/branch `main` và phân quyền editor.
+- [x] Kết nối GitHub repository `ctcm251010/kinhthanhlalethat` và push branch `main`.
+- [ ] Phân quyền repository cho editor được phép xuất bản.
 - [ ] Tạo GitHub OAuth App và deploy OAuth proxy trên Cloudflare.
 - [ ] Kết nối Workers Builds với GitHub, bật preview builds và custom domain.
 - [ ] Import dữ liệu Kinh Thánh 1925 từ nguồn đã xác minh.

@@ -2,7 +2,7 @@ local_backend: true
 
 backend:
   name: github
-  repo: YOUR_GITHUB_USER/YOUR_REPOSITORY
+  repo: ctcm251010/kinhthanhlalethat
   branch: main
   base_url: https://YOUR-OAUTH-WORKER.YOUR-SUBDOMAIN.workers.dev
   auth_endpoint: auth

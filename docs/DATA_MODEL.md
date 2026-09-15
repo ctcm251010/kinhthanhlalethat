@@ -66,3 +66,5 @@ Thông tin Zalo, Telegram, email và endpoint form nằm trong `src/config/site.
 ## Database
 
 Không có database và không có migration trong base version.
+
+Việc kết nối GitHub repository không thay đổi content schema hoặc mô hình dữ liệu.
