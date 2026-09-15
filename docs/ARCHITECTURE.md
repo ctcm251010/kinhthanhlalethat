@@ -6,6 +6,8 @@ Website sử dụng Astro với TypeScript ở chế độ static site generatio
 
 Source code được lưu tại `https://github.com/ctcm251010/kinhthanhlalethat` trên branch production `main`.
 
+Cloudflare Workers Builds đã kết nối repository và deploy production tại `https://kinh-thanh-la-le-that.ctcm251010.workers.dev`. Biến build `PUBLIC_SITE_URL` có thể ghi đè URL này khi chuyển sang custom domain.
+
 Luồng xuất bản dự kiến:
 
 1. Tác giả đăng nhập Decap CMS tại `/admin/`.
@@ -32,6 +34,7 @@ Luồng xuất bản dự kiến:
 - Dùng Content Collections và Zod để metadata có schema rõ ràng.
 - Dùng MDX chỉ cho lesson cần component giàu nội dung; Markdown thường vẫn được hỗ trợ.
 - Menu mobile dùng HTML/CSS và JavaScript tối thiểu, không hydrate framework.
+- Typography dùng Noto Sans self-host qua Fontsource cho toàn website; chỉ đóng gói subset Latin/Vietnamese và các weight thực tế để không phụ thuộc font CDN khi runtime.
 - Bible Reader đọc JSON qua module dữ liệu, không nhúng toàn bộ nội dung vào component.
 - Form liên hệ hiện chỉ là UI, không hiển thị trạng thái gửi thành công giả. Endpoint được để trống trong config cho phase sau.
 - Decap CMS dùng GitHub backend và đã trỏ tới repository `ctcm251010/kinhthanhlalethat`; OAuth proxy Cloudflare Worker chỉ được mô tả, chưa triển khai hoặc lưu secret.

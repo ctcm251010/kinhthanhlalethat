@@ -17,11 +17,12 @@
 
 ## Phase 2 — Nội dung và tích hợp production
 
-- [ ] Cung cấp tên miền, URL canonical và thông tin contact thật.
+- [ ] Cung cấp custom domain và thông tin contact thật; URL Workers hiện tại đã được cấu hình làm canonical tạm thời.
 - [x] Kết nối GitHub repository `ctcm251010/kinhthanhlalethat` và push branch `main`.
 - [ ] Phân quyền repository cho editor được phép xuất bản.
 - [ ] Tạo GitHub OAuth App và deploy OAuth proxy trên Cloudflare.
-- [ ] Kết nối Workers Builds với GitHub, bật preview builds và custom domain.
+- [x] Kết nối Workers Builds với GitHub, bật non-production branch builds và deploy trên `workers.dev`.
+- [ ] Kết nối custom domain và thay URL canonical tạm thời.
 - [ ] Import dữ liệu Kinh Thánh 1925 từ nguồn đã xác minh.
 - [ ] Kết nối form liên hệ với Cloudflare Worker/Email Service và Turnstile.
 

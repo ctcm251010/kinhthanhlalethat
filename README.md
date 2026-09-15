@@ -166,7 +166,7 @@ Lần đầu Wrangler sẽ yêu cầu đăng nhập Cloudflare. File `wrangler.j
 5. Build command: `npm run build`.
 6. Deploy command: `npx wrangler deploy`.
 7. Bật non-production branch builds để có preview URL nếu cần.
-8. Cấu hình `PUBLIC_SITE_URL` bằng domain production; `robots.txt`, sitemap và canonical sẽ dùng giá trị này. Cập nhật riêng URL placeholder trong Decap config.
+8. URL Workers hiện tại là `https://kinh-thanh-la-le-that.ctcm251010.workers.dev`. Khi có custom domain, cấu hình `PUBLIC_SITE_URL` bằng domain đó rồi cập nhật `site_url` và `display_url` trong Decap config.
 
 Sau deploy, làm smoke test theo `docs/TESTING.md`.
 

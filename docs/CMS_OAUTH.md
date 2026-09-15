@@ -2,12 +2,11 @@
 
 ## Trạng thái hiện tại
 
-`/admin/` đã có giao diện Decap CMS, collection cho Topic/Lesson, media upload và `editorial_workflow`. GitHub backend đã trỏ tới `ctcm251010/kinhthanhlalethat`; chưa có OAuth credential và chưa có Worker xác thực.
+`/admin/` đã có giao diện Decap CMS, collection cho Topic/Lesson, media upload và `editorial_workflow`. GitHub backend đã trỏ tới `ctcm251010/kinhthanhlalethat`, còn site/display URL đã trỏ tới deployment Workers hiện tại; chưa có OAuth credential và chưa có Worker xác thực.
 
 Các placeholder phải thay trước production:
 
 - `https://YOUR-OAUTH-WORKER.YOUR-SUBDOMAIN.workers.dev`
-- `https://example.com`
 
 ## Kiến trúc đã chọn
 
@@ -22,7 +21,7 @@ Base version chỉ mô tả kiến trúc này. Không scaffold mã OAuth từ m�
 3. Đặt Authorization callback URL là `https://<oauth-worker-domain>/callback`.
 4. Deploy OAuth proxy đã được review lên Cloudflare Worker.
 5. Lưu client ID bằng Worker variable và client secret bằng `wrangler secret put`; không ghi chúng vào file.
-6. Cập nhật `base_url`, `site_url`, `display_url` và `logo_url` trong `public/admin/config.yml`; trường `repo` đã được cấu hình.
+6. Cập nhật `base_url` trong `public/admin/config.yml`; các trường `repo`, `site_url`, `display_url` và `logo_url` đã được cấu hình. Cập nhật lại site/display URL khi chuyển sang custom domain.
 7. Chỉ cấp quyền push repository cho tác giả được phép xuất bản.
 8. Kiểm tra login, tạo draft, pull request, preview build, approve và publish.
 
